@@ -10,5 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/news")
 public class NewsController {
+    @Autowired
+    private NewsService newsService;
     
+    @GetMapping("/create")
+    public String create() {
+        return "news/create.html";
+    }
 }
