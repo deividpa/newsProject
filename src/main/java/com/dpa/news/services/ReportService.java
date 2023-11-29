@@ -1,0 +1,58 @@
+package com.dpa.news.services;
+
+import com.dpa.news.entities.Report;
+import com.dpa.news.exceptions.MyException;
+import com.dpa.news.repositories.ReportRepository;
+import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
+
+/**
+ *
+ * @author David Perez
+ */
+@Service
+public class ReportService {
+    private ReportRepository reportRepository;
+    
+    @Transactional
+    public void createReport(String title, String description) throws MyException {
+        if(title==null || title.isEmpty()) {
+            throw new MyException("The title can't be empty nor null");
+        }
+        
+        Report report = new Report();
+        report.setTitle(title);
+        report.setDescription(description);
+        reportRepository.save(report);
+    }
+    
+    public List<Report> listReports() {
+        List<Report> reports = new ArrayList();
+        reports = reportRepository.findAll();
+        
+        return reports;
+    }
+    
+    public void updateReport(Report report) throws MyException {
+        if(report==null) {
+            throw new MyException("There isn't report to update");
+        }
+        
+        Long id = report.getId();
+        String title = report.getTitle();
+        String description = report.getDescription();
+        
+        Optional<Report> responseReport = reportRepository.findById(id);
+        
+        if(responseReport.isPresent()) {
+            Report updatedReport = responseReport.get();
+            updatedReport.setTitle(title);
+            updatedReport.setDescription(description);
+            // TODO: Falta validar que esté actualizando bien
+            reportRepository.save(updatedReport);
+        }
+    }
+}
