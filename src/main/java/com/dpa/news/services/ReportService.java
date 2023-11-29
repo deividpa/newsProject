@@ -55,4 +55,9 @@ public class ReportService {
             reportRepository.save(updatedReport);
         }
     }
+    
+    public Report getOne(Long id) {
+        return reportRepository.getOne(id);
+        
+    }
 }

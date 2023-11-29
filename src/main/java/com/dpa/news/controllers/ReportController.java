@@ -1,7 +1,9 @@
 package com.dpa.news.controllers;
 
+import com.dpa.news.entities.Report;
 import com.dpa.news.exceptions.MyException;
 import com.dpa.news.services.ReportService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,11 +31,19 @@ public class ReportController {
     public String create(@RequestParam String title, @RequestParam String description, ModelMap model) {
         try {
             reportService.createReport(title, description);
-            model.put("succes", "Report was created successfully!");
+            model.put("success", "Report was created successfully!");
         } catch (MyException MyEx) {
             model.put("error", "There was an error creating the report: " + MyEx.getMessage());
             return "reports/create.html";
         }
+        
+        return "reports/index.html";
+    }
+    
+    @GetMapping("/index")
+    public String list(ModelMap model) {
+        List<Report> reports = reportService.listReports();
+        model.addAttribute("reports", reports);
         
         return "reports/index.html";
     }
