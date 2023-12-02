@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ReportService {
+    
+    @Autowired
     private ReportRepository reportRepository;
     
     @Transactional
@@ -36,14 +39,10 @@ public class ReportService {
         return reports;
     }
     
-    public void updateReport(Report report) throws MyException {
-        if(report==null) {
-            throw new MyException("There isn't report to update");
+    public void updateReport(Long id, String title, String description) throws MyException {
+        if(id==null || title==null || description == null) {
+            throw new MyException("Error: Parameter not found.");
         }
-        
-        Long id = report.getId();
-        String title = report.getTitle();
-        String description = report.getDescription();
         
         Optional<Report> responseReport = reportRepository.findById(id);
         
@@ -51,7 +50,6 @@ public class ReportService {
             Report updatedReport = responseReport.get();
             updatedReport.setTitle(title);
             updatedReport.setDescription(description);
-            // TODO: Falta validar que esté actualizando bien
             reportRepository.save(updatedReport);
         }
     }
