@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +46,29 @@ public class ReportController {
         List<Report> reports = reportService.listReports();
         model.addAttribute("reports", reports);
         
+        return "reports/index.html";
+    }
+    
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Long id, ModelMap model) {
+        Report report = reportService.getOne(id);
+        model.put("report", report);
+        return "reports/edit.html";
+    }
+    
+    @PostMapping("/edit/{id}")
+    public String edit(@PathVariable Long id, String title, String description, ModelMap model) {
+        try {
+            List<Report> reports = reportService.listReports();
+            reportService.updateReport(id, title, description);
+            
+            model.put("success", "Report was edited successfully!");  
+            model.addAttribute("report", reports);
+        } catch(MyException MyEx) {
+            model.put("error", MyEx.getMessage());
+            return "reports/edit.html";
+        }
+        //return "redirect:../index";
         return "reports/index.html";
     }
 }
