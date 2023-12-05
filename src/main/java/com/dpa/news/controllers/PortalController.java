@@ -14,9 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/")
-public class PortalController {
+public class PortalController { // localhost:8080
     @GetMapping("/")
-    public String Index() {
+    public String Index() {  // localhost:8080
         return "portal/index.html";
+    }
+    
+    @GetMapping("/signup")
+    public String signup() {
+        return "signup.html";
+    }
+    
+    @GetMapping("/login")
+    public String login() {
+        return "login.html";
     }
 }
