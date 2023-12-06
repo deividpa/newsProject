@@ -1,8 +1,10 @@
 package com.dpa.news.services;
 
+
 import com.dpa.news.entities.Username;
 import com.dpa.news.enums.Role;
 import com.dpa.news.exceptions.MyException;
+import com.dpa.news.repositories.UsernameRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.dpa.news.repositories.UsernameRepository;
 
 /**
  *
@@ -24,7 +25,7 @@ import com.dpa.news.repositories.UsernameRepository;
 public class UsernameService implements UserDetailsService {
     
     @Autowired
-    private UsernameRepository userRepository;
+    private UsernameRepository usernameRepository;
     
     @Transactional
     public void signup(String name, String email, String password, String password2) throws MyException {
@@ -38,7 +39,7 @@ public class UsernameService implements UserDetailsService {
         username.setPassword(password);
         username.setRole(Role.USER);
         
-        userRepository.save(username);
+        usernameRepository.save(username);
         
     }
     
@@ -62,7 +63,7 @@ public class UsernameService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Username username = userRepository.findByEmail(email);
+        Username username = usernameRepository.findByEmail(email);
         
         if(username != null) {
             
