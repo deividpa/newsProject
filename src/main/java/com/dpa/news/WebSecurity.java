@@ -1,5 +1,6 @@
 package com.dpa.news;
 
+import com.dpa.news.services.UsernameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +21,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity  {
-    //@Autowired
-    //private UsuarioServicio usuarioServicio;
+    @Autowired
+    private UsernameService usernameService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -30,11 +31,11 @@ public class WebSecurity  {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        /*auth
-            .userDetailsService(usuarioServicio)
-            .passwordEncoder(passwordEncoder());*/
+        auth
+            .userDetailsService(usernameService)
+            .passwordEncoder(passwordEncoder());
     }
-
+    /*
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -58,5 +59,5 @@ public class WebSecurity  {
             .csrf().disable();
 
         return http.build();
-    }
+    }*/
 }
