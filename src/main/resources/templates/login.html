@@ -8,25 +8,31 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     </head>
     <body>
+        <div th:if="${error!=null}" class="alert alert-warning" role="alert">
+            <span th:text="${error}"></span>
+        </div>
+        <div th:if="${logoutMessage!=null}" class="alert alert-warning" role="alert">
+            <span th:text="${logoutMessage}"></span>
+        </div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <h2 class="text-center mt-4">Iniciar Sesión</h2>
+                    <h2 class="text-center mt-4">Sign In!</h2>
                     <div class="card mt-4">
                         <div class="card-body">
-                            <form th:action="@{/login}" method="post">
+                            <form th:action="@{/logincheck}" method="post">
                                 <div class="form-group">
-                                    <label for="username">Usuario:</label>
-                                    <input type="text" class="form-control" id="username" name="username" required autofocus>
+                                    <label for="Email">Email</label>
+                                    <input type="text" class="form-control" id="email" name="email" required="required" autofocus="autofocus" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">Contraseña:</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" required="required" />
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                                 </div>
-                                <p class="text-center">¿No tienes cuenta? <a href="/signup">Regístrate aquí</a></p>
+                                <p class="text-center">You do not have an account? <a href="/signup">Sign up here!</a></p>
                             </form>
                         </div>
                     </div>
