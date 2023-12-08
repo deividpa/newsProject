@@ -9,6 +9,7 @@ import com.dpa.news.services.UsernameService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,11 +75,9 @@ public class PortalController { // localhost:8080
         return "login.html";
     }
     
+    @PreAuthorize("hasAnyRole('ROLE_USER, ROLE_ADMIN')")
     @GetMapping("/home")
-    public String home(/*@RequestParam(required=true) String success, @RequestParam(required=true) String email, ModelMap model*/) {
-
-        /*model.put("success", "Welcome to the Home Page " + email);*/
- 
+    public String home() {
         return "home.html";
     }
 }
