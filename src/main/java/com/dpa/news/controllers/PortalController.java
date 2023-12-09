@@ -75,7 +75,7 @@ public class PortalController { // localhost:8080
         return "login.html";
     }
     
-    @PreAuthorize("hasAnyRole('ROLE_USER, ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/home")
     public String home() {
         return "home.html";

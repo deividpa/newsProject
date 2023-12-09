@@ -37,6 +37,7 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
+                .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                 .requestMatchers(new AntPathRequestMatcher("/css/**", "GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/js/**", "GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/img/**", "GET")).permitAll()
@@ -49,7 +50,6 @@ public class WebSecurity {
                 .loginProcessingUrl("/logincheck")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                //.defaultSuccessUrl("/home")
                 .successHandler(successHandler())
                 .permitAll()
             )
