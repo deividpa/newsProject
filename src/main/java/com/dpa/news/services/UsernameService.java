@@ -5,6 +5,7 @@ import com.dpa.news.entities.Username;
 import com.dpa.news.enums.Role;
 import com.dpa.news.exceptions.MyException;
 import com.dpa.news.repositories.UsernameRepository;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  *
@@ -74,8 +77,13 @@ public class UsernameService implements UserDetailsService {
             
             permissions.add(p);
             
-            return new User(username.getEmail(), username.getPassword(), permissions);
+            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
             
+            HttpSession session = attr.getRequest().getSession(true);
+            
+            session.setAttribute("usernameSession", username);
+            
+            return new User(username.getEmail(), username.getPassword(), permissions); 
         } else {
             return null;
         }

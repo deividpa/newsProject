@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.dpa.news.controllers;
 
+import com.dpa.news.entities.Username;
 import com.dpa.news.exceptions.MyException;
 import com.dpa.news.services.UsernameService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -77,7 +74,14 @@ public class PortalController { // localhost:8080
     
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/home")
-    public String home() {
+    public String home(HttpSession session) {
+        
+        Username loggedUser = (Username) session.getAttribute("usernameSession");
+        
+        if(loggedUser.getRole().toString().equals("ADMIN")) {
+            return "redirect:/admin/dashboard";
+        }
+                
         return "home.html";
     }
 }
