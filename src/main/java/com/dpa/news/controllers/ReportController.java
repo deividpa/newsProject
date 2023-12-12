@@ -32,13 +32,16 @@ public class ReportController {
     public String create(@RequestParam String title, @RequestParam String description, ModelMap model) {
         try {
             reportService.createReport(title, description);
-            model.put("success", "Report was created successfully!");
+            model.addAttribute("success", "Report was created successfully!");
+
+            // load all the reports in the view
+            List<Report> reports = reportService.listReports();
+            model.addAttribute("reports", reports);
+            return "reports/index";
         } catch (MyException MyEx) {
-            model.put("error", "There was an error creating the report: " + MyEx.getMessage());
-            return "reports/create.html";
+            model.addAttribute("error", "There was an error creating the report: " + MyEx.getMessage());
+            return "reports/create";
         }
-        
-        return "reports/index.html";
     }
     
     @GetMapping("/index")
