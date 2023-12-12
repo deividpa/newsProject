@@ -6,6 +6,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -21,6 +22,9 @@ public class Username {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+    
+    @OneToOne
+    private Image image;
 
 
     public Username() {
