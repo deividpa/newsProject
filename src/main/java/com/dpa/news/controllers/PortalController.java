@@ -53,21 +53,18 @@ public class PortalController { // localhost:8080
     
     @GetMapping("/login")
     public String login(@RequestParam(required=false) String error, HttpServletRequest request, ModelMap model) {
-        /*if(error!=null) {
-            model.put("error", "The email or password is wrong");
-        }
-        return "login.html";*/
+
         HttpSession session = request.getSession(false);
         if (session != null) {
             String logoutMessage = (String) session.getAttribute("logoutMessage");
             if (logoutMessage != null) {
                 model.put("logoutMessage", logoutMessage);
-                session.removeAttribute("logoutMessage"); // Remove the session after the model was created
+                session.removeAttribute("logoutMessage"); // Remove the session after the model is created
             }
         }
 
         if (error != null) {
-            model.put("error", "El email o la contraseña son incorrectos");
+            model.put("error", "The email or password is wrong");
         }
         return "login.html";
     }
