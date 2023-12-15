@@ -1,14 +1,17 @@
 package com.dpa.news.services;
 
 
+import com.dpa.news.entities.Image;
 import com.dpa.news.entities.Username;
 import com.dpa.news.enums.Role;
 import com.dpa.news.exceptions.MyException;
 import com.dpa.news.repositories.UsernameRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -31,8 +35,11 @@ public class UsernameService implements UserDetailsService {
     @Autowired
     private UsernameRepository usernameRepository;
     
+    @Autowired
+    private ImageService imageService;
+    
     @Transactional
-    public void signup(String name, String email, String password, String password2) throws MyException {
+    public void signup(MultipartFile file, String name, String email, String password, String password2) throws MyException, IOException {
         
         validate(name, email, password, password2);
         
@@ -43,8 +50,43 @@ public class UsernameService implements UserDetailsService {
         username.setPassword(new BCryptPasswordEncoder().encode(password));
         username.setRole(Role.USER);
         
+        Image image = imageService.save(file);
+        
+        
+        
         usernameRepository.save(username);
         
+    }
+    
+    @Transactional
+    public void actualizar(MultipartFile file, String userID, String name, String email, String password, String password2) throws MyException, IOException {
+
+        validate(name, email, password, password2);
+
+        Optional<Username> response = usernameRepository.findById(userID);
+        if (response.isPresent()) {
+
+            Username username = response.get();
+            username.setName(name);
+            username.setEmail(email);
+
+            username.setPassword(new BCryptPasswordEncoder().encode(password));
+
+            username.setRole(Role.USER);
+            
+            String imageID = null;
+            
+            if (username.getImage() != null) {
+                imageID = username.getImage().getId();
+            }
+            
+            Image image = imageService.update(file, imageID);
+            
+            username.setImage(image);
+            
+            usernameRepository.save(username);
+        }
+
     }
     
     private void validate(String name, String email, String password, String password2) throws MyException {
