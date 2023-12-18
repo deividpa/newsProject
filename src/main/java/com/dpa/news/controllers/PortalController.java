@@ -2,9 +2,11 @@ package com.dpa.news.controllers;
 
 import com.dpa.news.entities.Username;
 import com.dpa.news.exceptions.MyException;
+import com.dpa.news.services.ImageService;
 import com.dpa.news.services.UsernameService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -21,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/")
 public class PortalController { // localhost:8080
+    
+    
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ImageService.class);
     
     @Autowired
     private UsernameService usernameService;
@@ -37,9 +46,11 @@ public class PortalController { // localhost:8080
     
     @PostMapping("/signup")
     public String signup(@RequestParam String name, @RequestParam String email, @RequestParam String password
-            , @RequestParam String password2, ModelMap model) throws MyException {
+            , @RequestParam String password2, ModelMap model, @RequestParam(name = "image") MultipartFile file) throws MyException, IOException {
         try {
-            usernameService.signup(name, email, password, password2);
+            logger.info("Iniciando guardado...");
+            logger.error("Contenido de FIle: " + file);
+            usernameService.signup(file, name, email, password, password2);
             model.put("success", "User registered successfully!");
             
             return "portal/index.html";

@@ -1,6 +1,8 @@
 package com.dpa.news.services;
 
+
 import com.dpa.news.entities.Image;
+import com.dpa.news.exceptions.MyException;
 import com.dpa.news.repositories.ImageRepository;
 import java.io.IOException;
 import java.util.Optional;
@@ -15,11 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ImageService {
-    
+
     @Autowired
     private ImageRepository imageRepository;
     
-    public Image save(MultipartFile file) throws IOException {
+    public Image save(MultipartFile file) throws  MyException {
         
         if(file!=null) {
             try {
@@ -27,7 +29,7 @@ public class ImageService {
                 Image image = new Image();
                 
                 image.setMime(file.getContentType());
-                image.setName(file.getName());
+                image.setName(file.getName());            
                 image.setContent(file.getBytes());
                 
                 return imageRepository.save(image);
@@ -36,7 +38,6 @@ public class ImageService {
                 System.err.println("Error creating the image: " + e.getMessage());
             }
         }
-        
         return null;
     }
     

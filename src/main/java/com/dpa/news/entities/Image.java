@@ -1,6 +1,7 @@
 package com.dpa.news.entities;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +29,9 @@ public class Image {
 
     
     
-    @Lob @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "content", columnDefinition="BLOB")
     private byte[] content;
 
     public String getId() {

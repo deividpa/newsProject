@@ -52,7 +52,7 @@ public class UsernameService implements UserDetailsService {
         
         Image image = imageService.save(file);
         
-        
+        username.setImage(image);
         
         usernameRepository.save(username);
         
