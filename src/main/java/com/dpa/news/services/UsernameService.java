@@ -59,7 +59,7 @@ public class UsernameService implements UserDetailsService {
     }
     
     @Transactional
-    public void actualizar(MultipartFile file, String userID, String name, String email, String password, String password2) throws MyException, IOException {
+    public void update(MultipartFile file, String userID, String name, String email, String password, String password2) throws MyException, IOException {
 
         validate(name, email, password, password2);
 
@@ -89,6 +89,10 @@ public class UsernameService implements UserDetailsService {
 
     }
     
+    public Username getOne(String id) {
+        return usernameRepository.getOne(id);
+    }
+    
     private void validate(String name, String email, String password, String password2) throws MyException {
 
         if (name.isEmpty()) {
@@ -108,27 +112,22 @@ public class UsernameService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException  {
         Username username = usernameRepository.findByEmail(email);
-        
-        if(username != null) {
-            
-            List<GrantedAuthority> permissions = new ArrayList();
-            
+    
+        if (username != null) {
+            List<GrantedAuthority> permissions = new ArrayList<>();
             GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + username.getRole().toString());
-            
             permissions.add(p);
-            
+
             ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            
             HttpSession session = attr.getRequest().getSession(true);
-            
             session.setAttribute("usernameSession", username);
-            
+
             return new User(username.getEmail(), username.getPassword(), permissions); 
         } else {
-            return null;
+            throw new UsernameNotFoundException("User not found with email: " + email);
         }
-       
+
     }
 }

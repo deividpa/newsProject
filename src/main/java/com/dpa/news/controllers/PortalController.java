@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -91,5 +92,41 @@ public class PortalController { // localhost:8080
         }
                 
         return "home.html";
+    }
+    
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/profile")
+    public String profile(ModelMap model,HttpSession session){
+        Username loggedUser = (Username) session.getAttribute("usernameSession");
+        model.put("username", loggedUser);
+        return "profile/index.html";
+    }
+    
+    @GetMapping("/profile/edit")
+    public String perfil(ModelMap modelo,HttpSession session){
+        Username username = (Username) session.getAttribute("usernameSession");
+         modelo.put("usuario", username);
+        return "profile/edit.html";
+    }
+    
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PostMapping("/profile/edit/{id}")
+    public String actualizar(MultipartFile file,@PathVariable String id, @RequestParam String name,@RequestParam String email, 
+            @RequestParam String password,@RequestParam String password2, ModelMap model) throws IOException {
+
+        try {
+            usernameService.update(file, id, name, email, password, password2);
+
+            model.put("success", "User updated successfully!");
+
+            return "home.html";
+        } catch (MyException MyEx) {
+
+            model.put("error", MyEx.getMessage());
+            model.put("name", name);
+            model.put("email", email);
+
+            return "profile/edit.html";
+        }
     }
 }

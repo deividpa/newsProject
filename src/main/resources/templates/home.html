@@ -16,6 +16,11 @@
                 <p class="lead" th:if="${session.usernameSession != null}" th:text=" 'Welcome Back, ' + ${session.usernameSession.getName()}"></p>
                 <hr class="my-4" />
                 <p>It is a customizable page</p>
+                <div class="container">
+                    <a th:if="${session.usernameSession.image != null}" class="d-flex align-items-center">
+                        <img class="logo"  th:src="@{/image/profile/__${session.usernameSession.id}__}" >
+                    </a>
+                </div>
             </div>
         </div>
     </body>
