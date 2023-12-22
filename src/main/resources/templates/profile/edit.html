@@ -7,10 +7,11 @@
     <body>
         <div class="container-fluid m-5">
 
-            <form class="form" th:action="@{/profile/__${username.id}__}" method="post" enctype="multipart/form-data">
-                <input hidden th:value="${id}" name="id" />
+            <form class="form" th:action="@{/profile/edit/__${username.id}__}" method="post" enctype="multipart/form-data">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" th:value="${id}" name="id" />
                 <div class="form-group my-3">
-                    <h3 class="card-title">Editar Usuario</h3>
+                    <h3 class="card-title">Edit User</h3>
                 </div>
                 <div class="form-group my-3">
                     <input type="text" class="form-control" name="name"  th:value="${username.name}" />
