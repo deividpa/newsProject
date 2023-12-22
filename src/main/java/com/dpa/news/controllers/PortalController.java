@@ -102,10 +102,11 @@ public class PortalController { // localhost:8080
         return "profile/index.html";
     }
     
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/profile/edit")
-    public String perfil(ModelMap modelo,HttpSession session){
+    public String perfil(ModelMap model,HttpSession session){
         Username username = (Username) session.getAttribute("usernameSession");
-         modelo.put("usuario", username);
+        model.put("username", username);
         return "profile/edit.html";
     }
     
