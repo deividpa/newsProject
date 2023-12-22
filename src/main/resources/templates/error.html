@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="en">
+<head th:replace="~{/fragments/head :: head}">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa; /* Background color similar to Bootstrap's default */
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff; /* White background */
+            border: 1px solid #d6d8db; /* Light gray border */
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        }
+
+        .error-heading {
+            font-size: 2em;
+            color: #dc3545; /* Bootstrap's danger color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid m-5">
+        <div class="error-container">
+            <h3 class="error-heading">Error</h3>
+            <p>Oops! Something went wrong.</p>
+            <a class="navbar-brand" th:text="'Error ' + ${code}"></a>
+            <p th:text="${message}"></p>
+            <a th:href="@{/home}" class="btn btn-primary">Go Back</a>
+        </div>
+    </div>
+</body>
+
+</html>
